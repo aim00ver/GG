@@ -119,7 +119,7 @@ namespace GAI
 
         void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            throw new NotImplementedException();
+
         }
 
         [Serializable]
@@ -131,11 +131,13 @@ namespace GAI
                 #region enums
                 public enum ExamType
                 {
+                    Undefined = -1,
                     Kharkov = 0,
                     Kiev = 3
                 }
                 public enum ExamTicketsNumber
                 {
+                    Undefined = -1,
                     Kharkov = 82,
                     Kiev = 126
                 }
@@ -252,6 +254,25 @@ namespace GAI
                 return s;
             }
             #endregion
+
+            public bool ProcessHtml(HtmlDocument document)
+            {
+                var url = document.Url.AbsolutePath;
+                var title = document.Title;
+                var examType = Exam.ExamType.Undefined;
+                //Екзаменаційні білети ДАІ Харківські 2015 AB. Білет # 35, комплект Харківські 2015 AB
+                //Екзаменаційні білети ДАІ Київські 2015 ABCD. 20 випадкових питань
+                if (title.ToLower().StartsWith("Екзаменаційні білети ДАІ Харківські 2015 AB.".ToLower()))
+                    examType = Exam.ExamType.Kharkov;
+                else if (title.ToLower().EndsWith("Екзаменаційні білети ДАІ Київські 2015 ABCD.".ToLower()))
+                    examType = Exam.ExamType.Kiev;
+                else
+                    return false;
+
+
+
+                return false;
+            }
         }
     }
 }
